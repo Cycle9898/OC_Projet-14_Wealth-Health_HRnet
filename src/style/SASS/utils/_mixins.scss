@@ -1,0 +1,6 @@
+//Font weight and size
+
+@mixin font-set($size: 1rem, $weight: 400) {
+    font-size: $size;
+    font-weight: $weight;
+}
