@@ -1,0 +1,32 @@
+/* HomePage component */
+
+.home-page {
+    padding: 50px 0px;
+    row-gap: 5vh;
+    justify-content: center;
+
+    h2 {
+        @include font-set(7rem, 700);
+    }
+
+    h3 {
+        @include font-set(4rem, 700);
+    }
+
+    &__links {
+        display: flex;
+        gap: 200px;
+
+        a {
+            @include font-set(1.2rem, 500);
+            padding: 10px;
+            border: 2px solid black;
+            border-radius: 5px;
+        }
+
+        a:hover {
+            background-color: $secondary-color;
+            border-color: $main-color;
+        }
+    }
+}
