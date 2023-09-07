@@ -2,6 +2,7 @@ import { Navigate,Outlet,RouterProvider,createBrowserRouter } from "react-router
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import HomePage from "./pages/HomePage";
+import ErrorPage from "./pages/ErrorPage";
 
 //Layout component for SPA to add header and footer on all pages
 function Layout() {
@@ -33,7 +34,7 @@ const defineRoutes = createBrowserRouter([
       },
       {
         path: "/error",
-        element: ""
+        element: <ErrorPage />
       },
       {
         path: "*",

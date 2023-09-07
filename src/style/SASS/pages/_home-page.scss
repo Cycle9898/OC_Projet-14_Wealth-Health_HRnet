@@ -16,17 +16,5 @@
     &__links {
         display: flex;
         gap: 200px;
-
-        a {
-            @include font-set(1.2rem, 500);
-            padding: 10px;
-            border: 2px solid black;
-            border-radius: 5px;
-        }
-
-        a:hover {
-            background-color: $secondary-color;
-            border-color: $main-color;
-        }
     }
 }

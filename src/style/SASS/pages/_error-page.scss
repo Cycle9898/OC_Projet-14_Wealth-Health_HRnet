@@ -1,0 +1,19 @@
+/* Error Page component */
+
+.error-page {
+    justify-content: center;
+    row-gap: 5vh;
+
+    h2 {
+        @include font-set(12rem, 700);
+        color: red;
+    }
+
+    h3 {
+        @include font-set(3rem, 500);
+    }
+
+    p {
+        @include font-set(2rem, 500);
+    }
+}
