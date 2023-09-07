@@ -1,9 +1,11 @@
 import { Navigate,Outlet,RouterProvider,createBrowserRouter } from "react-router-dom";
+import Header from "./components/Header";
 
-//Layout component for SPA to add header and footer on all pages
+//Layout component for SPA to add header on all pages
 function Layout() {
   return (
     <>
+      <Header />
       <Outlet />
     </>
   );
@@ -38,6 +40,12 @@ const defineRoutes = createBrowserRouter([
   }
 ]);
 
+/**
+ * @description
+ * Router component
+ * 
+ * @returns JSX.Element
+ */
 function Router() {
   return (<RouterProvider router={defineRoutes} />);
 }

@@ -4,6 +4,7 @@ div#root {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    font-family: $main-font;
 }
 
 main {
@@ -12,4 +13,9 @@ main {
 
 button {
     cursor: pointer;
+}
+
+a {
+    color: black;
+    text-decoration: none;
 }
