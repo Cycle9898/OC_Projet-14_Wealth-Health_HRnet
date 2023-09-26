@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
  * @description
  * React component that represent the Error Page of the app
  * 
- * @returns JSX.Element
+ * @returns JSX element
  */
 function ErrorPage() {
     return (

@@ -25,13 +25,13 @@ a {
 
 .main-button {
     display: block;
-    padding: 10px;
-    @include font-set(1.2rem, 500);
+    padding: 20px;
+    @include font-set(1.5rem, 500);
     border: 2px solid $main-color;
     border-radius: 5px;
 }
 
 .main-button:hover {
     background-color: $secondary-color;
-    border-color: $main-color;
+    color: white;
 }

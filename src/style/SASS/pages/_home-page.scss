@@ -1,16 +1,18 @@
 /* HomePage component */
 
 .home-page {
-    padding: 50px 0px;
-    row-gap: 5vh;
+    padding: 40px 0px;
+    row-gap: 4vh;
     justify-content: center;
 
     h2 {
-        @include font-set(7rem, 700);
+        @include font-set(8rem, 700);
+        color: $main-color;
     }
 
     h3 {
-        @include font-set(4rem, 700);
+        @include font-set(6rem, 700);
+        color: $main-color;
     }
 
     &__links {

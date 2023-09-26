@@ -2,7 +2,7 @@
  * @description
 * Footer React component
 * 
-* @returns JSX.Element
+* @returns JSX element
 */
 function Footer() {
     return (

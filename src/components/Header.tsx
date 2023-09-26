@@ -6,7 +6,7 @@ import wealthHealthLogo from '../assets/logo/logo-solo_Wealth-Health.png';
  * @description
 * Header React component
 * 
-* @returns JSX.Element
+* @returns JSX element
 */
 function Header() {
     // React-router hook to handle location

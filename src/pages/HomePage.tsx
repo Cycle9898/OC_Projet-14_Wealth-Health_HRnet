@@ -5,7 +5,7 @@ import wealthHealthLogo from '../assets/logo/logo-solo_Wealth-Health.png';
  * @description
  * React component that represent the homepage of the app
  * 
- * @returns JSX.Element
+ * @returns JSX element
  */
 function HomePage() {
     return (

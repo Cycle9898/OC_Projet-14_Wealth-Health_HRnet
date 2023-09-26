@@ -4,7 +4,7 @@ import Footer from "./components/Footer";
 import HomePage from "./pages/HomePage";
 import ErrorPage from "./pages/ErrorPage";
 
-//Layout component for SPA to add header and footer on all pages
+//Layout component for SPA to add header and footer on all views
 function Layout() {
   return (
     <>
@@ -48,7 +48,7 @@ const defineRoutes = createBrowserRouter([
  * @description
  * Router component
  * 
- * @returns JSX.Element
+ * @returns JSX element
  */
 function Router() {
   return (<RouterProvider router={defineRoutes} />);
