@@ -1,6 +1,7 @@
 import { Navigate,Outlet,RouterProvider,createBrowserRouter } from "react-router-dom";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
 import ErrorPage from "./pages/ErrorPage";
 
@@ -22,6 +23,10 @@ const defineRoutes = createBrowserRouter([
     children: [
       {
         path: "/",
+        element: <LoginPage />
+      },
+      {
+        path: "/home",
         element: <HomePage />
       },
       {

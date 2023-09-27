@@ -3,7 +3,11 @@ import wealthHealthLogo from '../assets/logo/logo-solo_Wealth-Health.png';
 
 /**
  * @description
- * React component that represent the homepage of the app
+ * React component that represent the home page
+ * 
+ * @remarks
+ * After a HR agent is logged, he gets redirected to this page.
+ * This page is not accessible without being logged in.
  * 
  * @returns JSX element
  */

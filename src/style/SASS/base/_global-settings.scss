@@ -25,6 +25,7 @@ a {
 
 .main-button {
     display: block;
+    background-color: white;
     padding: 20px;
     @include font-set(1.5rem, 500);
     border: 2px solid $main-color;

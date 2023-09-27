@@ -18,7 +18,10 @@ function Header() {
 
         switch (pathname) {
             case "/":
-                pageName = "Homepage";
+                pageName = "Login";
+                break;
+            case "/home":
+                pageName = "Home";
                 break;
             case "/employee-list":
                 pageName = "Employee list";
