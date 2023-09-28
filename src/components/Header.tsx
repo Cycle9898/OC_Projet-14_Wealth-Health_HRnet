@@ -1,6 +1,7 @@
-import { useEffect } from 'react';
+import { useContext,useEffect } from 'react';
 import { Link,useLocation } from 'react-router-dom';
 import wealthHealthLogo from '../assets/logo/logo-solo_Wealth-Health.png';
+import { AuthContext } from '../utils/context/AuthContext';
 
 /**
  * @description
@@ -11,6 +12,9 @@ import wealthHealthLogo from '../assets/logo/logo-solo_Wealth-Health.png';
 function Header() {
     // React-router hook to handle location
     const { pathname }: { pathname: string } = useLocation();
+
+    // Get connect status from Context
+    const { isConnected } = useContext(AuthContext);
 
     useEffect(() => {
         // Rename document title according to the page name (useLocation hook to determine the page name)
@@ -45,10 +49,13 @@ function Header() {
                 </div>
             </Link>
 
-            <nav className="header__nav">
-                <Link to="/employee-list">Employee list</Link>
-                <Link to="/add-employee">Add an employee</Link>
-            </nav>
+            {isConnected &&
+                <nav className="header__nav">
+                    <Link to="/employee-list">Employee list</Link>
+                    <Link to="/add-employee">Add an employee</Link>
+                    <span className="fa fa-sign-out" ></span>
+                </nav>
+            }
         </header>
     );
 }

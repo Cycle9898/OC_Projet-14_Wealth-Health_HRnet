@@ -2,7 +2,7 @@ import { Navigate,Outlet,RouterProvider,createBrowserRouter } from "react-router
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import LoginPage from "./pages/LoginPage";
-import HomePage from "./pages/HomePage";
+import ProtectedRoute from "./utils/ProtectedRoute";
 import ErrorPage from "./pages/ErrorPage";
 
 //Layout component for SPA to add header and footer on all views
@@ -27,7 +27,7 @@ const defineRoutes = createBrowserRouter([
       },
       {
         path: "/home",
-        element: <HomePage />
+        element: <ProtectedRoute pageName="home" />
       },
       {
         path: "/employee-list",
