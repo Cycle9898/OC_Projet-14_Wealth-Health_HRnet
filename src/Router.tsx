@@ -31,11 +31,11 @@ const defineRoutes = createBrowserRouter([
       },
       {
         path: "/employee-list",
-        element: ""
+        element: <ProtectedRoute pageName="employee-list" />
       },
       {
         path: "/add-employee",
-        element: ""
+        element: <ProtectedRoute pageName="add-employee" />
       },
       {
         path: "/forbidden",

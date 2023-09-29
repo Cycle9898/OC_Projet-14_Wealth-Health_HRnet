@@ -36,3 +36,15 @@ a {
     background-color: $secondary-color;
     color: white;
 }
+
+.input-error {
+    color: red;
+    margin-top: 2px;
+    font-size: 0.9rem;
+}
+
+.error-msg {
+    font-size: 1.5em;
+    color: red;
+    margin: 50px;
+}

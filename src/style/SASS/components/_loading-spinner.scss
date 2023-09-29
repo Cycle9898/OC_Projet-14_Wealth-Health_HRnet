@@ -1,0 +1,17 @@
+/*Loading spinner*/
+
+.loading-spinner {
+    display: block;
+    width: 90px;
+    height: 90px;
+    position: absolute;
+    top: 200px;
+    left: calc(50% - 45px);
+    animation: spinner-kf linear 5s infinite both;
+}
+
+@keyframes spinner-kf {
+    100% {
+        transform: rotate(360deg);
+    }
+}
