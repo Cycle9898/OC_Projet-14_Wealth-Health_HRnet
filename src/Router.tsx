@@ -38,8 +38,12 @@ const defineRoutes = createBrowserRouter([
         element: ""
       },
       {
+        path: "/forbidden",
+        element: <ErrorPage errorCode="401" />
+      },
+      {
         path: "/error",
-        element: <ErrorPage />
+        element: <ErrorPage errorCode="404" />
       },
       {
         path: "*",
