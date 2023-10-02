@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { AuthContext } from "./context/AuthContext";
-import LoginPage from "../pages/LoginPage";
+import HomePage from "../pages/HomePage";
 import { Navigate } from "react-router-dom";
 
 type Props = {
@@ -26,11 +26,11 @@ function ProtectedRoute({ pageName }: Props) {
 
     switch (pageName) {
         case "home":
-            reactComponent = <LoginPage />;
+            reactComponent = <HomePage />;
             break;
 
         default:
-            reactComponent = <LoginPage />;
+            reactComponent = <HomePage />;
     }
 
     return (

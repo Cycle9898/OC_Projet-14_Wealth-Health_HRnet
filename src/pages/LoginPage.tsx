@@ -1,5 +1,6 @@
 import { useContext,useEffect,useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useLoginService } from '../utils/hooks/AuthServices';
 import wealthHealthLogo from '../assets/logo/logo-solo_Wealth-Health.png';
 import { AuthContext } from '../utils/context/AuthContext';
 import LoadingSpinner from '../components/LoadingSpinner';
@@ -30,18 +31,20 @@ function LoginPage() {
 
     const handlePasswordInput = (event: React.ChangeEvent<HTMLInputElement>) => setPasswordInput(event.target.value);
 
-    const handleCompletedForm = () => setFormCompleted(emailInput !== "" && passwordInput !== "");
-
     const handleForm = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        // Check if form inputs aren't empty
-        handleCompletedForm();
-
-        if (isEmailValid && isFormCompleted) {
-            // Try to authenticate the user with a custom Hook
+        if (isEmailValid && passwordInput !== "") {
+            setFormCompleted(true);
+            // Try to authenticate the user
+            handleLogin(emailInput,passwordInput);
+        } else {
+            setFormCompleted(false);
         }
     }
+
+    // Handle login process with a custom hook
+    const handleLogin = useLoginService();
 
     useEffect(() => {
         // Check if the email is valid and update isEmailValid boolean according to the case
