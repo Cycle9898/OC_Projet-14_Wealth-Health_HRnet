@@ -15,11 +15,6 @@ type AuthContextType = {
 }
 
 // Create authentication Context
-export const AuthContext = createContext<AuthContextType>({
-    isConnected: false,
-    handleConnectStatus: () => { },
-    authErrorStatuses: { isAuthError: false,isServerError: false },
-    handleAuthErrors: () => { },
-    isAuthLoading: false,
-    handleAuthLoadingStatus: () => { }
-});
+export const AuthContext = createContext<AuthContextType>(
+    {} as AuthContextType
+);
