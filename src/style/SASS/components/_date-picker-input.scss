@@ -1,0 +1,26 @@
+/* DatePickerInput component */
+
+.date-picker {
+    position: relative;
+
+    &__calendar {
+        position: absolute;
+        top: 65px;
+        height: fit-content;
+        width: 100%;
+        z-index: 1;
+        background-color: white;
+        border: 2px solid $secondary-color;
+        border-radius: 5px;
+    }
+}
+
+.calendar {
+    &__header {
+        color: blue;
+    }
+
+    &__body {
+        color: orangered;
+    }
+}
