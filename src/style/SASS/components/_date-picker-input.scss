@@ -6,8 +6,10 @@
     &__calendar {
         position: absolute;
         top: 65px;
+        left: calc(50% - 200px);
         height: fit-content;
-        width: 100%;
+        width: 400px;
+        padding: 10px 15px 20px;
         z-index: 1;
         background-color: white;
         border: 2px solid $secondary-color;
@@ -17,10 +19,97 @@
 
 .calendar {
     &__header {
-        color: blue;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+
+        &__controls {
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: $main-color;
+            border: 2px solid $main-color;
+            border-radius: 5px;
+            margin: 0 20px;
+
+            &--left {
+                margin-right: 20px;
+            }
+        }
+
+        .rcdc-dropdown-wrapper {
+            width: 90px;
+            @include font-set(0.8rem, 500);
+        }
+
+        .rcdc-dropdown-value-container {
+            padding: 2px;
+
+            &:focus {
+                outline-width: 2px;
+            }
+        }
+
+        .rcdc-dropdown-value-logo {
+            font-size: 0.8rem;
+        }
     }
 
     &__body {
-        color: orangered;
+        &__title {
+            display: grid;
+            grid-template-areas:
+                "T T T T T T T";
+            margin-bottom: 1px;
+
+            >span {
+                width: 50px;
+                padding: 5px;
+                border: 1px solid black;
+                border-radius: 5px;
+                margin: 1px;
+                text-align: center;
+                background-color: lighten($main-color, 60);
+                font-size: 1.2rem;
+            }
+        }
+
+        &__days {
+            display: grid;
+            grid-template-areas:
+                "D D D D D D D"
+                "D D D D D D D"
+                "D D D D D D D"
+                "D D D D D D D"
+                "D D D D D D D"
+                "D D D D D D D";
+
+            >li {
+                cursor: pointer;
+                padding: 5px;
+                border: 1px solid grey;
+                border-radius: 5px;
+                margin: 1px;
+                @include font-set(1.1rem, 500);
+                text-align: center;
+                line-height: 2.39rem;
+
+                &:focus,
+                &:hover {
+                    background-color: $secondary-color;
+                    color: white;
+                }
+
+                &.today {
+                    border-color: $main-color;
+                    border-width: 2px;
+                    margin: 0;
+                }
+
+                &.hidden {
+                    visibility: hidden;
+                }
+            }
+        }
     }
 }
