@@ -1,5 +1,5 @@
 import { useEffect,useRef,useState } from "react";
-import { monthsOptions,yearsOptions } from "../utils/data/datePickerDropdownData";
+import { monthsOnly,monthsOptions,yearsOptions } from "../utils/data/datePickerDropdownData";
 import { Dropdown } from "@cycle9898/react-custom-dropdown-component";
 import { FaCaretLeft,FaCaretRight } from "react-icons/fa6";
 
@@ -28,12 +28,11 @@ function DatePickerInput({ chosenDate,setChosenDate,labelText }: Props) {
 
     // Calendar (state) variables
     const today: Date = new Date();
-    const monthOnly: string[] = monthsOptions.map((option) => option.value);
-    const [chosenMonth,setChosenMonth] = useState<string>(monthOnly[today.getMonth()]);
+    const [chosenMonth,setChosenMonth] = useState<string>(monthsOnly[today.getMonth()]);
     const [chosenYear,setChosenYear] = useState<string>(today.getFullYear().toString());
-    const nbOfDaysInChosenMonth: number = 32 - new Date(parseInt(chosenYear),monthOnly.indexOf(chosenMonth),32).getDate();
+    const nbOfDaysInChosenMonth: number = 32 - new Date(parseInt(chosenYear),monthsOnly.indexOf(chosenMonth),32).getDate();
     const daysRange: string[] = Array.from({ length: nbOfDaysInChosenMonth },(_,index) => String(index + 1).padStart(2,"0"));
-    const startingDay = new Date(parseInt(chosenYear),monthOnly.indexOf(chosenMonth)).getDay();
+    const startingDay = new Date(parseInt(chosenYear),monthsOnly.indexOf(chosenMonth)).getDay();
     // Unshift daysRange array elements from "x" indexes according to startingDay value
     daysRange.unshift(...Array.from({ length: startingDay },() => ""));
 
@@ -43,7 +42,7 @@ function DatePickerInput({ chosenDate,setChosenDate,labelText }: Props) {
             setChosenMonth("January");
             setChosenYear((prevState) => (parseInt(prevState) + 1).toString());
         } else {
-            setChosenMonth(monthOnly[monthOnly.indexOf(chosenMonth) + 1]);
+            setChosenMonth(monthsOnly[monthsOnly.indexOf(chosenMonth) + 1]);
         }
     };
 
@@ -52,23 +51,61 @@ function DatePickerInput({ chosenDate,setChosenDate,labelText }: Props) {
             setChosenMonth("December");
             setChosenYear((prevState) => (parseInt(prevState) - 1).toString());
         } else {
-            setChosenMonth(monthOnly[monthOnly.indexOf(chosenMonth) - 1]);
+            setChosenMonth(monthsOnly[monthsOnly.indexOf(chosenMonth) - 1]);
         }
     };
 
     const isCurrentDayToday = (day: string) => (parseInt(day) === today.getDate()) &&
-        (monthOnly.indexOf(chosenMonth) === today.getMonth()) &&
+        (monthsOnly.indexOf(chosenMonth) === today.getMonth()) &&
         (parseInt(chosenYear) === today.getFullYear());
 
     const defineChosenDate = (chosenDay: string) => {
-        setChosenDate(`${String((monthOnly.indexOf(chosenMonth)) + 1).padStart(2,"0")}/${chosenDay}/${chosenYear}`);
+        setChosenDate(`${String((monthsOnly.indexOf(chosenMonth)) + 1).padStart(2,"0")}/${chosenDay}/${chosenYear}`);
         setIsOpen(false);
+    }
+
+    const preventDefaultActions = (event: KeyboardEvent) => {
+        if ([" ","Home","End"].includes(event.key)) {
+            event.preventDefault()
+        }
+    };
+
+    const closeWithEscape = (event: React.KeyboardEvent) => event.key === "Escape" && setIsOpen(false);
+
+    const handleKeyboardControls = (event: React.KeyboardEvent<HTMLDivElement>) => {
+        event.key === "Home" && defineChosenDate("01");
+        event.key === "End" && defineChosenDate(`${nbOfDaysInChosenMonth}`);
+
+        // Trap user inside the date picker
+        if (event.key === "Tab") {
+            if (!event.shiftKey && document.activeElement === liElementRef.current[liElementRef.current.length - 1]) {
+                event.preventDefault();
+                dateInputRef.current?.focus();
+            } else if (event.shiftKey && document.activeElement === dateInputRef.current) {
+                event.preventDefault();
+                liElementRef.current[liElementRef.current.length - 1]?.focus();
+            }
+        }
     }
 
     // Ref
     const datePickerRef: React.MutableRefObject<HTMLDivElement | null> = useRef(null);
+    const dateInputRef: React.MutableRefObject<HTMLInputElement | null> = useRef(null);
+    const liElementRef: React.MutableRefObject<HTMLLIElement[]> = useRef([]);
 
     useEffect(() => {
+        // Block some keyboard controls when date picker is open
+        if (isOpen) {
+            document.addEventListener("keydown",(event) => preventDefaultActions(event));
+        }
+
+        // When date picker is open, focus automatically on the selected day (if any)
+        if (isOpen && chosenDate.split("/").length === 3) {
+            const selectedDay: string = chosenDate.split("/")[1]
+            const currentLiElement = liElementRef.current.find(element => element?.innerText === selectedDay);
+            currentLiElement?.focus();
+        }
+
         // Check if a click is made outside of the dropdown list and close it
         const handleClickOutside = (event: MouseEvent) => {
             if (datePickerRef.current && !datePickerRef.current.contains(event.target as Node)) {
@@ -80,66 +117,95 @@ function DatePickerInput({ chosenDate,setChosenDate,labelText }: Props) {
         return () => {
             // Clean up event listener
             document.removeEventListener("click",(event) => handleClickOutside(event));
+            document.removeEventListener("keydown",(event) => preventDefaultActions(event));
         }
-    },[]);
+    },[isOpen,chosenDate]);
 
     return (
-        <div className="date-picker employee-form__data-fields" ref={datePickerRef}>
+        <div className="date-picker employee-form__data-fields"
+            ref={datePickerRef}
+            onKeyDown={(event) => isOpen && handleKeyboardControls(event)}
+        >
             <label>{labelText}
                 <input type="text"
                     value={chosenDate}
                     placeholder="MM/DD/YYYY"
+                    ref={dateInputRef}
+                    role="combobox"
+                    aria-description="MM/DD/YYYY"
+                    aria-expanded={isOpen}
+                    aria-haspopup="dialog"
                     onChange={(event) => setChosenDate(event.target.value)}
                     onClick={toggleIsOpen}
-                    onKeyUp={(event) => [" ","Enter"].includes(event.key) && toggleIsOpen()}
+                    onKeyUp={(event) => event.key === "Enter" && toggleIsOpen()}
+                    onKeyDown={(event) => closeWithEscape(event)}
                 />
             </label>
 
             {isOpen && (
-                <div className="date-picker__calendar">
+                <div className="date-picker__calendar"
+                    role="dialog"
+                    aria-modal="true"
+                    aria-label="Use the date picker to choose a date"
+                >
                     <div className="calendar__header">
                         <FaCaretLeft className="calendar__header__controls"
                             tabIndex={0}
+                            role="button"
+                            aria-label="Previous month"
                             onClick={changeToPreviousMonth}
                             onKeyDown={(event: KeyboardEvent) => [" ","Enter"].includes(event.key) && changeToPreviousMonth()}
+                            onKeyUp={(event: React.KeyboardEvent) => closeWithEscape(event)}
                         />
 
                         <Dropdown
                             displayedValue={chosenMonth}
                             setDisplayedValue={setChosenMonth}
                             optionArray={monthsOptions}
+                            aria-label="Choose the month in the dropdown list"
                         />
 
                         <Dropdown
                             displayedValue={chosenYear}
                             setDisplayedValue={setChosenYear}
                             optionArray={yearsOptions}
+                            aria-label="Choose the year in the dropdown list"
                         />
 
                         <FaCaretRight className="calendar__header__controls"
                             tabIndex={0}
+                            role="button"
+                            aria-label="Next month"
                             onClick={changeToNextMonth}
                             onKeyDown={(event: KeyboardEvent) => [" ","Enter"].includes(event.key) && changeToNextMonth()}
+                            onKeyUp={(event: React.KeyboardEvent) => closeWithEscape(event)}
                         />
                     </div>
 
-                    <div className="calendar__body">
+                    <div className="calendar__body"
+                        role="grid"
+                        aria-label="Choose a date"
+                    >
                         <div className="calendar__body__title">
-                            <span>Sun</span>
-                            <span>Mon</span>
-                            <span>Tue</span>
-                            <span>Wed</span>
-                            <span>Thu</span>
-                            <span>Fri</span>
-                            <span>Sat</span>
+                            <span role="gridcell">Sun</span>
+                            <span role="gridcell">Mon</span>
+                            <span role="gridcell">Tue</span>
+                            <span role="gridcell">Wed</span>
+                            <span role="gridcell">Thu</span>
+                            <span role="gridcell">Fri</span>
+                            <span role="gridcell">Sat</span>
                         </div>
 
                         <ul className="calendar__body__days">
                             {daysRange.map((day,index) => <li key={index}
                                 className={isCurrentDayToday(day) ? "today" : day === "" ? "hidden" : undefined}
                                 tabIndex={0}
+                                aria-label="Validate this day"
+                                role="gridcell"
+                                ref={(liElement: HTMLLIElement) => liElementRef.current[index] = liElement}
                                 onClick={() => defineChosenDate(day)}
                                 onKeyDown={(event) => [" ","Enter"].includes(event.key) && defineChosenDate(day)}
+                                onKeyUp={(event) => closeWithEscape(event)}
                             >
                                 {day}
                             </li>)}
