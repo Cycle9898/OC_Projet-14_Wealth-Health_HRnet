@@ -30,12 +30,27 @@ function DatePickerInput({ chosenDate,setChosenDate,labelText }: Props) {
     const today: Date = new Date();
     const [chosenMonth,setChosenMonth] = useState<string>(monthsOnly[today.getMonth()]);
     const [chosenYear,setChosenYear] = useState<string>(today.getFullYear().toString());
+    const nbOfDaysInPreviousMonth: number = 32 - new Date(parseInt(chosenYear),(monthsOnly.indexOf(chosenMonth) - 1),32).getDate();
     const nbOfDaysInChosenMonth: number = 32 - new Date(parseInt(chosenYear),monthsOnly.indexOf(chosenMonth),32).getDate();
     const daysRange: string[] = Array.from({ length: nbOfDaysInChosenMonth },(_,index) => String(index + 1).padStart(2,"0"));
     const startingDay = new Date(parseInt(chosenYear),monthsOnly.indexOf(chosenMonth)).getDay();
-    // Unshift daysRange array elements from "x" indexes according to startingDay value
-    daysRange.unshift(...Array.from({ length: startingDay },() => ""));
 
+    // Add days from previous and next months to daysRange
+    const previousMonthDays = Array.from({ length: startingDay },(_,index) => String(nbOfDaysInPreviousMonth - index).padStart(2,"0")).reverse()
+    daysRange.unshift(...previousMonthDays);
+
+    const nextMonthDays = Array.from({ length: ((startingDay > 4 ? 42 : 35) - nbOfDaysInChosenMonth - startingDay) },
+        (_,index) => (index + 1).toString())
+    daysRange.push(...nextMonthDays);
+
+    // Check to exclude nextMonthDays and previousMonthDays days from actual month
+    const isIndexExcluded = (index: number) => {
+        if (index < previousMonthDays.length) { return true; }
+
+        if (index >= (daysRange.length - nextMonthDays.length)) { return true; }
+
+        return false;
+    }
     // Calendar functions
     const changeToNextMonth = () => {
         if (chosenMonth === "December") {
@@ -65,7 +80,7 @@ function DatePickerInput({ chosenDate,setChosenDate,labelText }: Props) {
     }
 
     const preventDefaultActions = (event: KeyboardEvent) => {
-        if ([" ","Home","End"].includes(event.key)) {
+        if ([" ","Home","End","ArrowLeft","ArrowRight"].includes(event.key)) {
             event.preventDefault()
         }
     };
@@ -75,15 +90,17 @@ function DatePickerInput({ chosenDate,setChosenDate,labelText }: Props) {
     const handleKeyboardControls = (event: React.KeyboardEvent<HTMLDivElement>) => {
         event.key === "Home" && defineChosenDate("01");
         event.key === "End" && defineChosenDate(`${nbOfDaysInChosenMonth}`);
+        event.key === "ArrowLeft" && changeToPreviousMonth();
+        event.key === "ArrowRight" && changeToNextMonth();
 
         // Trap user inside the date picker
         if (event.key === "Tab") {
-            if (!event.shiftKey && document.activeElement === liElementRef.current[liElementRef.current.length - 1]) {
+            if (!event.shiftKey && document.activeElement === liElementRef.current[(previousMonthDays.length - 1) + nbOfDaysInChosenMonth]) {
                 event.preventDefault();
                 dateInputRef.current?.focus();
             } else if (event.shiftKey && document.activeElement === dateInputRef.current) {
                 event.preventDefault();
-                liElementRef.current[liElementRef.current.length - 1]?.focus();
+                liElementRef.current[(previousMonthDays.length - 1) + nbOfDaysInChosenMonth]?.focus();
             }
         }
     }
@@ -198,11 +215,11 @@ function DatePickerInput({ chosenDate,setChosenDate,labelText }: Props) {
 
                         <ul className="calendar__body__days">
                             {daysRange.map((day,index) => <li key={index}
-                                className={isCurrentDayToday(day) ? "today" : day === "" ? "hidden" : undefined}
-                                tabIndex={0}
-                                aria-label="Validate this day"
-                                role="gridcell"
-                                ref={(liElement: HTMLLIElement) => liElementRef.current[index] = liElement}
+                                className={isCurrentDayToday(day) ? "today" : isIndexExcluded(index) ? "excluded" : undefined}
+                                tabIndex={isIndexExcluded(index) ? -1 : 0}
+                                aria-label={isIndexExcluded(index) ? undefined : "Validate this day"}
+                                role={isIndexExcluded(index) ? undefined : "gridcell"}
+                                ref={(liElement: HTMLLIElement) => (liElementRef.current[index] = liElement)}
                                 onClick={() => defineChosenDate(day)}
                                 onKeyDown={(event) => [" ","Enter"].includes(event.key) && defineChosenDate(day)}
                                 onKeyUp={(event) => closeWithEscape(event)}
