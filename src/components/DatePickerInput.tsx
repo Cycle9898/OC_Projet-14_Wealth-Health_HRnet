@@ -1,4 +1,4 @@
-import { useEffect,useRef,useState } from "react";
+import { useEffect,useId,useRef,useState } from "react";
 import { monthsOnly,monthsOptions,yearsOptions } from "../utils/data/datePickerDropdownData";
 import { Dropdown } from "@cycle9898/react-custom-dropdown-component";
 import { FaCaretLeft,FaCaretRight } from "react-icons/fa6";
@@ -25,6 +25,10 @@ function DatePickerInput({ chosenDate,setChosenDate,labelText }: Props) {
     const [isOpen,setIsOpen] = useState<boolean>(false);
 
     const toggleIsOpen = () => setIsOpen((previousState: boolean) => !previousState);
+
+    // ID's
+    const labelId = useId();
+    const inputId = useId();
 
     // Calendar (state) variables
     const today: Date = new Date();
@@ -143,21 +147,24 @@ function DatePickerInput({ chosenDate,setChosenDate,labelText }: Props) {
             ref={datePickerRef}
             onKeyDown={(event) => isOpen && handleKeyboardControls(event)}
         >
-            <label>{labelText}
-                <input type="text"
-                    value={chosenDate}
-                    placeholder="MM/DD/YYYY"
-                    ref={dateInputRef}
-                    role="combobox"
-                    aria-description="MM/DD/YYYY"
-                    aria-expanded={isOpen}
-                    aria-haspopup="dialog"
-                    onChange={(event) => setChosenDate(event.target.value)}
-                    onClick={toggleIsOpen}
-                    onKeyUp={(event) => event.key === "Enter" && toggleIsOpen()}
-                    onKeyDown={(event) => closeWithEscape(event)}
-                />
-            </label>
+            <label id={labelId} htmlFor={inputId}>{labelText}</label>
+
+            <input id={inputId}
+                type="text"
+                value={chosenDate}
+                placeholder="MM/DD/YYYY"
+                ref={dateInputRef}
+                role="combobox"
+                aria-labelledby={labelId}
+                aria-description="MM/DD/YYYY"
+                aria-expanded={isOpen}
+                aria-haspopup="dialog"
+                onChange={(event) => setChosenDate(event.target.value)}
+                onClick={toggleIsOpen}
+                onKeyUp={(event) => event.key === "Enter" && toggleIsOpen()}
+                onKeyDown={(event) => closeWithEscape(event)}
+            />
+
 
             {isOpen && (
                 <div className="date-picker__calendar"

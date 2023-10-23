@@ -1,0 +1,38 @@
+/* SaveEmployeeDataForm component */
+
+.employee-register-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: 25px;
+}
+
+.employee-form {
+    width: 400px;
+    font-size: 1.2rem;
+
+    &__data-fields {
+        display: flex;
+        flex-direction: column;
+        row-gap: 10px;
+        margin-bottom: 20px;
+
+        input {
+            border: 2px solid $main-color;
+            border-radius: 5px;
+            padding: 5px;
+        }
+
+        input:focus {
+            background-color: $secondary-color;
+            color: white;
+        }
+    }
+
+    fieldset {
+        border: 2px double $main-color;
+        border-radius: 5px;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+}

@@ -1,7 +1,8 @@
 import { useContext } from "react";
 import { AuthContext } from "./context/AuthContext";
-import HomePage from "../pages/HomePage";
 import { Navigate } from "react-router-dom";
+import HomePage from "../pages/HomePage";
+import AddEmployeePage from "../pages/AddEmployeePage";
 
 type Props = {
     pageName: string
@@ -27,6 +28,10 @@ function ProtectedRoute({ pageName }: Props) {
     switch (pageName) {
         case "home":
             reactComponent = <HomePage />;
+            break;
+
+        case "add-employee":
+            reactComponent = <AddEmployeePage />;
             break;
 
         default:

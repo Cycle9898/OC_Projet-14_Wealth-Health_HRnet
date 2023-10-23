@@ -48,3 +48,20 @@ a {
     color: red;
     margin: 50px;
 }
+
+div.rcdc-dropdown-value-container {
+    border-color: $main-color;
+}
+
+svg.rcdc-dropdown-value-logo {
+    color: $main-color;
+}
+
+ul.rcdc-dropdown-list {
+    border-color: $main-color;
+}
+
+li.rcdc-dropdown-option:focus,
+li.rcdc-dropdown-option:hover {
+    background-color: $secondary-color;
+}

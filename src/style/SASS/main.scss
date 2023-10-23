@@ -15,9 +15,12 @@
 @import './components/header';
 @import './components/footer';
 @import './components/loading-spinner';
+@import './components/save-employee-data-form';
+@import './components/date-picker-input';
 
 //Pages
 
 @import './pages/login-page';
 @import './pages/home-page';
 @import './pages/error-page';
+@import './pages/add-employee-page';
