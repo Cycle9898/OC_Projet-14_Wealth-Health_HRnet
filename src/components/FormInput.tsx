@@ -1,4 +1,5 @@
-import { useId } from "react";
+import { useId,useState } from "react";
+import { checkGenericString,checkZipCodeString } from "../utils/inputValidationFunctions";
 
 type Props = {
     state: string,
@@ -16,16 +17,24 @@ function FormInput({ state,setState,labelText }: Props) {
     const labelId = useId();
     const inputId = useId();
 
+    const [errorMessage,setErrorMessage] = useState<string | null>(null)
+
     return (
         <div className="employee-form__data-fields">
             <label id={labelId} htmlFor={inputId}>{labelText}</label>
 
-            <input type={labelText === "Zip Code" ? "number" : "text"}
+            <input type="text"
                 id={inputId}
                 aria-labelledby={labelId}
                 value={state}
                 onChange={(event) => setState(event.target.value)}
+                onBlur={() => labelText === "Zip Code" ?
+                    setErrorMessage(checkZipCodeString(state))
+                    :
+                    setErrorMessage(checkGenericString(state)
+                    )}
             />
+            {errorMessage && <p className="input-error">{errorMessage}</p>}
         </div>
     );
 }

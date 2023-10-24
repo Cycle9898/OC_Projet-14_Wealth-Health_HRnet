@@ -38,14 +38,14 @@ a {
 }
 
 .input-error {
-    color: red;
+    color: $error-color;
     margin-top: 2px;
     font-size: 0.9rem;
 }
 
 .error-msg {
     font-size: 1.5em;
-    color: red;
+    color: $error-color;
     margin: 50px;
 }
 

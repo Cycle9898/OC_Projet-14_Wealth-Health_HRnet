@@ -2,6 +2,7 @@ import { useEffect,useId,useRef,useState } from "react";
 import { monthsOnly,monthsOptions,yearsOptions } from "../utils/data/datePickerDropdownData";
 import { Dropdown } from "@cycle9898/react-custom-dropdown-component";
 import { FaCaretLeft,FaCaretRight } from "react-icons/fa6";
+import { checkDateString } from "../utils/inputValidationFunctions";
 
 type Props = {
     chosenDate: string,
@@ -114,7 +115,13 @@ function DatePickerInput({ chosenDate,setChosenDate,labelText }: Props) {
     const dateInputRef: React.MutableRefObject<HTMLInputElement | null> = useRef(null);
     const liElementRef: React.MutableRefObject<HTMLLIElement[]> = useRef([]);
 
+    // Input error handling
+    const [errorMessage,setErrorMessage] = useState<string | null>(null);
+
     useEffect(() => {
+        // Check input date validity
+        chosenDate !== "" && setErrorMessage(checkDateString(chosenDate));
+
         // Block some keyboard controls when date picker is open
         if (isOpen) {
             document.addEventListener("keydown",(event) => preventDefaultActions(event));
@@ -165,6 +172,7 @@ function DatePickerInput({ chosenDate,setChosenDate,labelText }: Props) {
                 onKeyDown={(event) => closeWithEscape(event)}
             />
 
+            {errorMessage && <p className="input-error">{errorMessage}</p>}
 
             {isOpen && (
                 <div className="date-picker__calendar"

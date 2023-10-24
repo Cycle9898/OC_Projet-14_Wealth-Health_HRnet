@@ -3,6 +3,7 @@ import DatePickerInput from "./DatePickerInput";
 import { Dropdown } from "@cycle9898/react-custom-dropdown-component";
 import { departmentsOptions,statesOptions } from "../utils/data/formDropdownData";
 import FormInput from "./FormInput";
+import { EmployeeFormFieldsType,ValidateEmployeeForm } from "../utils/inputValidationFunctions";
 
 /**
  * @description
@@ -14,6 +15,7 @@ function SaveEmployeeDataForm() {
     // ID's
     const usStateLabelId = useId();
     const departmentLabelId = useId();
+
     // Form elements states
     const [firstName,setFirstName] = useState<string>("");
     const [lastName,setLastName] = useState<string>("");
@@ -24,6 +26,31 @@ function SaveEmployeeDataForm() {
     const [usState,setUsState] = useState<string>("");
     const [zipCode,setZipCode] = useState<string>("");
     const [department,setDepartment] = useState<string>("");
+
+    // Form functions
+    const handleFormSubmit = () => {
+        // Regroup all form fields inside an object
+        const allFormFiels: EmployeeFormFieldsType = {
+            firstName,
+            lastName,
+            birthDate: birthDateString,
+            startDate: startDateString,
+            street,
+            city,
+            state: usState,
+            zipCode,
+            department
+        };
+
+        // Check form validity before saving data
+        if (ValidateEmployeeForm(allFormFiels)) {
+            // Save data and open confirmation modal
+            console.log("OK") //TBC
+        } else {
+            // open error modal
+            console.log("form error") //TBC
+        }
+    };
 
     return (
         <section className="employee-register-section">
@@ -97,7 +124,13 @@ function SaveEmployeeDataForm() {
                 </div>
             </form >
 
-            <button className="main-button">Save</button>
+            <button
+                className="main-button"
+                onClick={handleFormSubmit}
+                onKeyDown={(event) => [" ","Enter"].includes(event.key) && handleFormSubmit()}
+            >
+                Save
+            </button>
         </section>
     );
 }
