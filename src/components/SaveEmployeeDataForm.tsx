@@ -7,6 +7,8 @@ import { EmployeeFormFieldsType,ValidateEmployeeForm } from "../utils/inputValid
 import ModalMainContainer from "./modal-related/ModalMainContainer";
 import EmployeeSavedSubModal from "./modal-related/EmployeeSavedSubModal";
 import EmployeeFormErrorSubModal from "./modal-related/EmployeeSaveErrorSubModal";
+import { useSaveEmployeeData } from "../utils/hooks/EmployeeFormSaveServices";
+import LoadingSpinner from "./LoadingSpinner";
 
 /**
  * @description
@@ -69,7 +71,7 @@ function SaveEmployeeDataForm() {
         // Check form validity before saving data
         if (ValidateEmployeeForm(allFormFiels)) {
             // Save data, open confirmation modal and reset form fields
-            console.log("OK") //TBC
+            saveEmployeeData(allFormFiels);
 
             setModalSubComponent(<EmployeeSavedSubModal setOpeningStatus={setIsModalOpen} />);
             setIsModalOpen(true);
@@ -82,96 +84,113 @@ function SaveEmployeeDataForm() {
         }
     };
 
+    // Save data Hook
+    const { isRequestLoading,isRequestError,saveEmployeeData } = useSaveEmployeeData();
+
+    if (isRequestError) {
+        return (
+            <main className="main">
+                <p className="error-msg">Due to a network error, this page could not be loaded.</p>
+                <p className="error-msg">Please try again later.</p>
+            </main>
+        );
+    }
+
     return (
-        <section className="employee-register-section">
-            <form className="employee-form"
-                onSubmit={(event) => event.preventDefault()}
-                aria-hidden={isModalOpen}
-            >
-                <FormInput
-                    state={firstName}
-                    setState={setFirstName}
-                    labelText="First Name"
-                />
-
-                <FormInput
-                    state={lastName}
-                    setState={setLastName}
-                    labelText="Last Name"
-                />
-
-                <DatePickerInput
-                    chosenDate={birthDateString}
-                    setChosenDate={setBirthDateString}
-                    labelText="Date of Birth"
-                />
-
-                <DatePickerInput
-                    chosenDate={startDateString}
-                    setChosenDate={setStartDateString}
-                    labelText="Start Date"
-                />
-
-                <fieldset>
-                    <legend>Address</legend>
-
-                    <FormInput
-                        state={street}
-                        setState={setStreet}
-                        labelText="Street"
-                    />
-
-                    <FormInput
-                        state={city}
-                        setState={setCity}
-                        labelText="City"
-                    />
-
-                    <div className="employee-form__data-fields">
-                        <span id={usStateLabelId}>State</span>
-
-                        <Dropdown
-                            displayedValue={usState}
-                            setDisplayedValue={setUsState}
-                            optionArray={statesOptions}
-                            ariaLabelById={usStateLabelId}
+        <>
+            {isRequestLoading ? (
+                <LoadingSpinner />
+            ) : (
+                <section className="employee-register-section">
+                    <form className="employee-form"
+                        onSubmit={(event) => event.preventDefault()}
+                        aria-hidden={isModalOpen}
+                    >
+                        <FormInput
+                            state={firstName}
+                            setState={setFirstName}
+                            labelText="First Name"
                         />
-                    </div>
 
-                    <FormInput
-                        state={zipCode}
-                        setState={setZipCode}
-                        labelText="Zip Code"
-                    />
-                </fieldset>
+                        <FormInput
+                            state={lastName}
+                            setState={setLastName}
+                            labelText="Last Name"
+                        />
 
-                <div className="employee-form__data-fields">
-                    <span id={departmentLabelId}>Department</span>
+                        <DatePickerInput
+                            chosenDate={birthDateString}
+                            setChosenDate={setBirthDateString}
+                            labelText="Date of Birth"
+                        />
 
-                    <Dropdown
-                        displayedValue={department}
-                        setDisplayedValue={setDepartment}
-                        optionArray={departmentsOptions}
-                        ariaLabelById={departmentLabelId}
-                    />
-                </div>
-            </form >
+                        <DatePickerInput
+                            chosenDate={startDateString}
+                            setChosenDate={setStartDateString}
+                            labelText="Start Date"
+                        />
 
-            <button
-                className="main-button"
-                aria-hidden={isModalOpen}
-                onClick={(event) => handleFormSubmit(event)}
-                onKeyDown={(event) => [" ","Enter"].includes(event.key) && handleFormSubmit()}
-            >
-                Save
-            </button>
+                        <fieldset>
+                            <legend>Address</legend>
 
-            {isModalOpen && <ModalMainContainer
-                openingStatus={isModalOpen}
-                setOpeningStatus={setIsModalOpen}
-                displayedComponent={modalSubComponent}
-            />}
-        </section>
+                            <FormInput
+                                state={street}
+                                setState={setStreet}
+                                labelText="Street"
+                            />
+
+                            <FormInput
+                                state={city}
+                                setState={setCity}
+                                labelText="City"
+                            />
+
+                            <div className="employee-form__data-fields">
+                                <span id={usStateLabelId}>State</span>
+
+                                <Dropdown
+                                    displayedValue={usState}
+                                    setDisplayedValue={setUsState}
+                                    optionArray={statesOptions}
+                                    ariaLabelById={usStateLabelId}
+                                />
+                            </div>
+
+                            <FormInput
+                                state={zipCode}
+                                setState={setZipCode}
+                                labelText="Zip Code"
+                            />
+                        </fieldset>
+
+                        <div className="employee-form__data-fields">
+                            <span id={departmentLabelId}>Department</span>
+
+                            <Dropdown
+                                displayedValue={department}
+                                setDisplayedValue={setDepartment}
+                                optionArray={departmentsOptions}
+                                ariaLabelById={departmentLabelId}
+                            />
+                        </div>
+                    </form >
+
+                    <button
+                        className="main-button"
+                        aria-hidden={isModalOpen}
+                        onClick={(event) => handleFormSubmit(event)}
+                        onKeyDown={(event) => [" ","Enter"].includes(event.key) && handleFormSubmit()}
+                    >
+                        Save
+                    </button>
+
+                    {isModalOpen && <ModalMainContainer
+                        openingStatus={isModalOpen}
+                        setOpeningStatus={setIsModalOpen}
+                        displayedComponent={modalSubComponent}
+                    />}
+                </section>)}
+        </>
     );
 }
 
