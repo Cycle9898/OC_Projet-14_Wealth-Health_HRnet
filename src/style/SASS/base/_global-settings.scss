@@ -30,11 +30,12 @@ a {
     @include font-set(1.5rem, 500);
     border: 2px solid $main-color;
     border-radius: 5px;
-}
 
-.main-button:hover {
-    background-color: $secondary-color;
-    color: white;
+    &:hover,
+    &:focus {
+        background-color: $secondary-color;
+        color: white;
+    }
 }
 
 .input-error {

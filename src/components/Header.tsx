@@ -46,7 +46,7 @@ function Header() {
 
     return (
         <header className="header">
-            <Link to="/">
+            <Link to="/" aria-label="Go to homepage">
                 <div className="header__logo">
                     <img src={wealthHealthLogo} alt="Wealth Health logo" />
                     <h1>WEALTH HEALTH</h1>
