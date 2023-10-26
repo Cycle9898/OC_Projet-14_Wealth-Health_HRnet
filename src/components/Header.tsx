@@ -3,6 +3,7 @@ import { Link,useLocation } from 'react-router-dom';
 import wealthHealthLogo from '../assets/logo/logo-solo_Wealth-Health.png';
 import { AuthContext } from '../utils/context/AuthContext';
 import { useLogoutService } from '../utils/hooks/AuthServices';
+import { FaSignOutAlt } from 'react-icons/fa'
 
 /**
  * @description
@@ -46,18 +47,20 @@ function Header() {
 
     return (
         <header className="header">
+            <div className="header__logo">
+                <img src={wealthHealthLogo} alt="Wealth Health logo" />
+                <h1>WEALTH HEALTH</h1>
+            </div>
+
             <Link to="/" aria-label="Go to homepage">
-                <div className="header__logo">
-                    <img src={wealthHealthLogo} alt="Wealth Health logo" />
-                    <h1>WEALTH HEALTH</h1>
-                </div>
+                <h2>HRnet</h2>
             </Link>
 
             {isConnected &&
                 <nav className="header__nav">
-                    <Link to="/employee-list">Employee list</Link>
+                    <Link to="/employees-list">Employees list</Link>
                     <Link to="/add-employee">Add an employee</Link>
-                    <span className="fa fa-sign-out" onClick={handleLogout} ></span>
+                    <span onClick={handleLogout} aria-label="Logout" ><FaSignOutAlt /></span>
                 </nav>
             }
         </header>

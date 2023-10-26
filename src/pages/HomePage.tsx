@@ -23,7 +23,7 @@ function HomePage() {
             <h3>HRnet</h3>
 
             <div className="home-page__links">
-                <Link className="main-button" to="/employee-list">Employee list</Link>
+                <Link className="main-button" to="/employees-list">Employees list</Link>
                 <Link className="main-button" to="/add-employee">Add an employee</Link>
             </div>
         </main>

@@ -30,8 +30,8 @@ const defineRoutes = createBrowserRouter([
         element: <ProtectedRoute pageName="home" />
       },
       {
-        path: "/employee-list",
-        element: <ProtectedRoute pageName="employee-list" />
+        path: "/employees-list",
+        element: <ProtectedRoute pageName="employees-list" />
       },
       {
         path: "/add-employee",

@@ -1,13 +1,16 @@
 /* Header component */
 
 .header {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-areas: "logo appName nav";
+    grid-template-columns: repeat(3, 1fr);
     align-items: center;
     padding: 20px 30px;
     border-bottom: 2px solid $main-color;
 
     &__logo {
+        grid-area: logo;
+        justify-self: start;
         display: flex;
         align-items: center;
         gap: 20px;
@@ -25,10 +28,22 @@
         }
     }
 
+    >a {
+        grid-area: appName;
+        justify-self: center;
+
+        >h2 {
+            font-size: 1.9rem;
+        }
+    }
+
     &__nav {
+        grid-area: nav;
+        justify-self: end;
         display: flex;
         align-items: center;
         gap: 40px;
+        text-align: center;
 
         a,
         span {

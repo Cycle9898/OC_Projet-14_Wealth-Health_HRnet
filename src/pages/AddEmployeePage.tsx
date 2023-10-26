@@ -12,6 +12,8 @@ import SaveEmployeeDataForm from "../components/SaveEmployeeDataForm";
 function AddEmployeePage() {
     return (
         <main className="main add-employee-page">
+            <h2>Create an employee</h2>
+
             <SaveEmployeeDataForm />
         </main>
     );
