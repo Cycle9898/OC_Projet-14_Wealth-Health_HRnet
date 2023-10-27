@@ -60,7 +60,13 @@ function Header() {
                 <nav className="header__nav">
                     <Link to="/employees-list">Employees list</Link>
                     <Link to="/add-employee">Add an employee</Link>
-                    <span onClick={handleLogout} aria-label="Logout" ><FaSignOutAlt /></span>
+                    <span onClick={handleLogout}
+                        onKeyDown={(event) => event.key === "Enter" && handleLogout()}
+                        tabIndex={0}
+                        aria-label="Logout"
+                    >
+                        <FaSignOutAlt />
+                    </span>
                 </nav>
             }
         </header>
