@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { AuthContext,AuthErrorStatusesType } from "./AuthContext";
+import { EmployeeDataType,EmployeesContext } from "./EmployeesContext";
 
 type Props = {
     children: JSX.Element
@@ -32,6 +33,21 @@ function ContextProvider({ children }: Props) {
 
     const handleAuthLoadingStatus = (status: boolean) => setAuthLoading(status);
 
+    // Employees Array
+    const [employeesDataArray,setEmployeesDataArray] = useState<EmployeeDataType[]>([]);
+
+    const handleEmployeesArray = (employeesDataArray: EmployeeDataType[]) => setEmployeesDataArray(employeesDataArray);
+
+    // Employees error status
+    const [isEmployeesError,setIsEmployeesError] = useState<boolean>(false);
+
+    const handleEmployeesErrorStatus = (errorStatus: boolean) => setIsEmployeesError(errorStatus);
+
+    // Employees loading status
+    const [isEmployeesLoading,setIsEmployeesLoading] = useState<boolean>(false);
+
+    const handleEmployeesLoadingStatus = (loadingStatus: boolean) => setIsEmployeesLoading(loadingStatus);
+
     return (
         <AuthContext.Provider value={{
             isConnected,
@@ -41,7 +57,16 @@ function ContextProvider({ children }: Props) {
             isAuthLoading,
             handleAuthLoadingStatus
         }}>
-            {children}
+            <EmployeesContext.Provider value={{
+                employeesDataArray,
+                handleEmployeesArray,
+                isEmployeesError,
+                handleEmployeesErrorStatus,
+                isEmployeesLoading,
+                handleEmployeesLoadingStatus
+            }}>
+                {children}
+            </EmployeesContext.Provider>
         </AuthContext.Provider>
     );
 }

@@ -3,6 +3,7 @@ import { AuthContext } from "./context/AuthContext";
 import { Navigate } from "react-router-dom";
 import HomePage from "../pages/HomePage";
 import AddEmployeePage from "../pages/AddEmployeePage";
+import EmployeesListPage from "../pages/EmployeesListPage";
 
 type Props = {
     pageName: string
@@ -32,6 +33,10 @@ function ProtectedRoute({ pageName }: Props) {
 
         case "add-employee":
             reactComponent = <AddEmployeePage />;
+            break;
+
+        case "employees-list":
+            reactComponent = <EmployeesListPage />;
             break;
 
         default:

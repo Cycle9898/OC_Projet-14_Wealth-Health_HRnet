@@ -7,11 +7,11 @@ export type AuthErrorStatusesType = {
 
 type AuthContextType = {
     isConnected: boolean,
-    handleConnectStatus: ((status: boolean) => void),
+    handleConnectStatus: (status: boolean) => void,
     authErrorStatuses: AuthErrorStatusesType,
     handleAuthErrors: (authErrorStatuses: AuthErrorStatusesType) => void,
     isAuthLoading: boolean,
-    handleAuthLoadingStatus: ((status: boolean) => void)
+    handleAuthLoadingStatus: (status: boolean) => void
 }
 
 // Create authentication Context
