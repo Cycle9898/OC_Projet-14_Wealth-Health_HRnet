@@ -1,7 +1,7 @@
 import { createContext } from "react";
 
 export type EmployeeDataType = {
-    _id: string,
+    id: string,
     firstName: string,
     lastName: string,
     birthDate: string,

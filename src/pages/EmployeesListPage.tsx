@@ -3,6 +3,7 @@ import { EmployeesContext } from "../utils/context/EmployeesContext";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { Dropdown } from "@cycle9898/react-custom-dropdown-component";
 import { showEntriesOptions } from "../utils/data/EmployeesTableDropdownData";
+import { useGetEmployeesData } from "../utils/hooks/EmployeeFetchService";
 
 /**
  * @description
@@ -14,7 +15,7 @@ import { showEntriesOptions } from "../utils/data/EmployeesTableDropdownData";
  * @returns JSX element
  */
 function EmployeesListPage() {
-    // Get connect, auth error and auth loading statuses from React Context
+    // Get employeesDataArray, employees error and employees loading statuses from EmployeesContext
     const { employeesDataArray,isEmployeesError,isEmployeesLoading } = useContext(EmployeesContext);
 
     // Employees table State variables
@@ -25,6 +26,9 @@ function EmployeesListPage() {
     const showEntriesNbLabelId = useId();
     const searchLabelId = useId();
     const searchInputId = useId();
+
+    // Fetch employees data with custom Hook
+    useGetEmployeesData();
 
     if (isEmployeesError) {
         return (
