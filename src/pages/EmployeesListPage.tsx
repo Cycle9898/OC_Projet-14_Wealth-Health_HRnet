@@ -4,6 +4,10 @@ import LoadingSpinner from "../components/LoadingSpinner";
 import { Dropdown } from "@cycle9898/react-custom-dropdown-component";
 import { showEntriesOptions } from "../utils/data/EmployeesTableDropdownData";
 import { useGetEmployeesData } from "../utils/hooks/EmployeeFetchService";
+import { statesOptions } from "../utils/data/formDropdownData";
+import { ImBin } from "react-icons/im";
+import { MdModeEditOutline } from "react-icons/md";
+import useEmployeesTableSearchSortPaging from "../utils/hooks/EmployeesTableServices";
 
 /**
  * @description
@@ -22,6 +26,7 @@ function EmployeesListPage() {
     const [showEntries,setShowEntries] = useState<string>("");
     const [searchTerm,setSearchTerm] = useState<string>("");
 
+    const { filteredEmployeesDataArray } = useEmployeesTableSearchSortPaging(searchTerm);
     // ID's
     const showEntriesNbLabelId = useId();
     const searchLabelId = useId();
@@ -88,18 +93,44 @@ function EmployeesListPage() {
                                     <th>City</th>
                                     <th>State</th>
                                     <th>Zip Code</th>
-                                    <th>Actions</th>
+                                    <th className="not-sorted">Actions</th>
                                 </tr>
                             </thead>
 
                             <tbody className="employees-table__body">
-                                {employeesDataArray.length === 0 ? (
+                                {filteredEmployeesDataArray.length === 0 ? (
                                     <tr>
                                         <td colSpan={10}>No data available in table</td>
                                     </tr>
                                 ) : (
                                     <>
-                                        {null /* TBC */}
+                                        {filteredEmployeesDataArray.map((employeeData) => (
+                                            <tr key={employeeData.id}>
+                                                <td>{employeeData.firstName}</td>
+                                                <td>{employeeData.lastName}</td>
+                                                <td>{employeeData.startDate}</td>
+                                                <td>{employeeData.department}</td>
+                                                <td>{employeeData.birthDate}</td>
+                                                <td>{employeeData.street}</td>
+                                                <td>{employeeData.city}</td>
+                                                <td>{statesOptions.find((state) => state.value === employeeData.state)?.id}</td>
+                                                <td>{employeeData.zipCode}</td>
+                                                <td className="actions">
+                                                    <button className="main-button actions-bts"
+                                                        aria-label={`Edit ${employeeData.firstName} ${employeeData.lastName}`}
+                                                        title={`Edit ${employeeData.firstName} ${employeeData.lastName}`}
+                                                    >
+                                                        <MdModeEditOutline />
+                                                    </button>
+
+                                                    <button className="main-button actions-bts"
+                                                        aria-label={`Delete ${employeeData.firstName} ${employeeData.lastName}`}
+                                                        title={`Delete ${employeeData.firstName} ${employeeData.lastName}`}
+                                                    >
+                                                        <ImBin />
+                                                    </button>
+                                                </td>
+                                            </tr>))}
                                     </>
                                 )}
                             </tbody>
@@ -107,7 +138,10 @@ function EmployeesListPage() {
 
                         <div className="paging">
                             <div className="paging__detail-entries">
-                                <span style={{ color: "red" }}>Showing {"TBC"/* first el */} to {"TBC"/* last el */} of {"TBC"/* total el */} entries</span>
+                                <span style={{ color: "red" }}>
+                                    Showing {"TBC"/* first el */} to {"TBC"/* last el */} of {filteredEmployeesDataArray.length} entries
+                                    {searchTerm.length >= 2 ? ` (filtered from ${employeesDataArray.length} total entries)` : null}
+                                </span>
                             </div>
 
                             <div className="paging__pagination">

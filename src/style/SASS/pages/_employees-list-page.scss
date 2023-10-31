@@ -81,7 +81,12 @@
         th {
             border-left: 1px solid lighten($main-color, 50);
             border-right: 1px solid lighten($main-color, 50);
-            padding: 5px 10px;
+            padding: 15px;
+            cursor: pointer;
+
+            &.not-sorted {
+                cursor: default;
+            }
         }
     }
 
@@ -105,6 +110,22 @@
             border-left: 1px solid lighten($main-color, 50);
             border-right: 1px solid lighten($main-color, 50);
             padding: 5px;
+
+            &.actions {
+                display: flex;
+                column-gap: 15px;
+            }
+
+            .actions-bts {
+                padding: 5px;
+                font-size: 0.9rem;
+                line-height: 0.9rem;
+
+                &:hover,
+                &:focus {
+                    background-color: $main-color;
+                }
+            }
         }
     }
 }
