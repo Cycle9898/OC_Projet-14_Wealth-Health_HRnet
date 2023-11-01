@@ -45,7 +45,7 @@ function DatePickerInput({ chosenDate,setChosenDate,labelText }: Props) {
     daysRange.unshift(...previousMonthDays);
 
     const nextMonthDays = Array.from({ length: ((startingDay > 4 ? 42 : 35) - nbOfDaysInChosenMonth - startingDay) },
-        (_,index) => (index + 1).toString())
+        (_,index) => String(index + 1).padStart(2,"0"))
     daysRange.push(...nextMonthDays);
 
     // Check to exclude nextMonthDays and previousMonthDays days from actual month
@@ -84,15 +84,18 @@ function DatePickerInput({ chosenDate,setChosenDate,labelText }: Props) {
         setIsOpen(false);
     }
 
-    const preventDefaultActions = (event: KeyboardEvent) => {
+    const preventDefaultActions = (event: React.KeyboardEvent<HTMLDivElement>) => {
         if ([" ","Home","End","ArrowLeft","ArrowRight"].includes(event.key)) {
-            event.preventDefault()
+            event.preventDefault();
+            event.stopPropagation();
         }
     };
 
     const closeWithEscape = (event: React.KeyboardEvent) => event.key === "Escape" && setIsOpen(false);
 
     const handleKeyboardControls = (event: React.KeyboardEvent<HTMLDivElement>) => {
+        isOpen && preventDefaultActions(event);
+
         event.key === "Home" && defineChosenDate("01");
         event.key === "End" && defineChosenDate(`${nbOfDaysInChosenMonth}`);
         event.key === "ArrowLeft" && changeToPreviousMonth();
@@ -122,11 +125,6 @@ function DatePickerInput({ chosenDate,setChosenDate,labelText }: Props) {
         // Check input date validity
         chosenDate !== "" && setErrorMessage(checkDateString(chosenDate));
 
-        // Block some keyboard controls when date picker is open
-        if (isOpen) {
-            document.addEventListener("keydown",(event) => preventDefaultActions(event));
-        }
-
         // When date picker is open, focus automatically on the selected day (if any)
         if (isOpen && chosenDate.split("/").length === 3) {
             const selectedDay: string = chosenDate.split("/")[1]
@@ -145,7 +143,6 @@ function DatePickerInput({ chosenDate,setChosenDate,labelText }: Props) {
         return () => {
             // Clean up event listener
             document.removeEventListener("click",(event) => handleClickOutside(event));
-            document.removeEventListener("keydown",(event) => preventDefaultActions(event));
         }
     },[isOpen,chosenDate]);
 
@@ -230,7 +227,7 @@ function DatePickerInput({ chosenDate,setChosenDate,labelText }: Props) {
 
                         <ul className="calendar__body__days">
                             {daysRange.map((day,index) => <li key={index}
-                                className={isCurrentDayToday(day) ? "today" : isIndexExcluded(index) ? "excluded" : undefined}
+                                className={isIndexExcluded(index) ? "excluded" : isCurrentDayToday(day) ? "today" : undefined}
                                 tabIndex={isIndexExcluded(index) ? -1 : 0}
                                 aria-label={isIndexExcluded(index) ? undefined : "Validate this day"}
                                 role={isIndexExcluded(index) ? undefined : "gridcell"}
