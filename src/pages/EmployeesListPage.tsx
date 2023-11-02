@@ -8,6 +8,12 @@ import { statesOptions } from "../utils/data/formDropdownData";
 import { ImBin } from "react-icons/im";
 import { MdModeEditOutline } from "react-icons/md";
 import useEmployeesTableSearchSortPaging from "../utils/hooks/EmployeesTableServices";
+import { FaCaretUp,FaCaretDown } from "react-icons/fa6";
+
+export type SortingDetailType = {
+    columnName: string,
+    sortingType: string
+};
 
 /**
  * @description
@@ -25,8 +31,35 @@ function EmployeesListPage() {
     // Employees table State variables
     const [showEntries,setShowEntries] = useState<string>("");
     const [searchTerm,setSearchTerm] = useState<string>("");
+    const tableHeadersArray: string[] = [
+        "First Name",
+        "Last Name",
+        "Start Date",
+        "Department",
+        "Date of Birth",
+        "Street",
+        "City",
+        "State",
+        "Zip Code"
+    ];
 
-    const { filteredEmployeesDataArray } = useEmployeesTableSearchSortPaging(searchTerm);
+    // Search, sort or paginate related
+    const [sortingDetail,setSortingDetail] = useState<SortingDetailType>({ columnName: "First Name",sortingType: "ASC" });
+    const { filteredEmployeesDataArray } = useEmployeesTableSearchSortPaging(searchTerm,sortingDetail);
+
+    const isSortActive = (columnName: string,sortingType: string) => {
+        return ((sortingDetail.columnName === columnName && sortingDetail.sortingType === sortingType) ||
+            sortingDetail.columnName !== columnName);
+    }
+
+    const toggleSortCaret = (columnName: string) => {
+        if (columnName === sortingDetail.columnName) {
+            setSortingDetail({ columnName,sortingType: sortingDetail.sortingType === "ASC" ? "DESC" : "ASC" });
+        } else {
+            setSortingDetail({ columnName,sortingType: "ASC" });
+        }
+    }
+
     // ID's
     const showEntriesNbLabelId = useId();
     const searchLabelId = useId();
@@ -84,15 +117,25 @@ function EmployeesListPage() {
                         <table className="employees-table">
                             <thead className="employees-table__header">
                                 <tr>
-                                    <th>First Name</th>
-                                    <th>Last Name</th>
-                                    <th>Start Date</th>
-                                    <th>Department</th>
-                                    <th>Date of Birth</th>
-                                    <th>Street</th>
-                                    <th>City</th>
-                                    <th>State</th>
-                                    <th>Zip Code</th>
+                                    {tableHeadersArray.map((header) => (
+                                        <th key={header}
+                                            tabIndex={0}
+                                            role="button"
+                                            aria-label={`Sort ${header} column ${(sortingDetail.columnName === header && sortingDetail.sortingType === "ASC") ?
+                                                "descending" : "ascending"}`}
+                                            title={`Sort "${header}" column ${(sortingDetail.columnName === header && sortingDetail.sortingType === "ASC") ?
+                                                "descending" : "ascending"}`}
+                                            onClick={() => toggleSortCaret(header)}
+                                            onKeyDown={(event) => event.key === "Enter" && toggleSortCaret(header)}
+                                        >
+                                            <span>{header}</span>
+                                            <span className="sorting-carets">
+                                                {isSortActive(header,"ASC") && <FaCaretUp />}
+                                                {isSortActive(header,"DESC") && <FaCaretDown />}
+                                            </span>
+                                        </th>
+                                    ))}
+
                                     <th className="not-sorted">Actions</th>
                                 </tr>
                             </thead>
@@ -113,7 +156,7 @@ function EmployeesListPage() {
                                                 <td>{employeeData.birthDate}</td>
                                                 <td>{employeeData.street}</td>
                                                 <td>{employeeData.city}</td>
-                                                <td>{statesOptions.find((state) => state.value === employeeData.state)?.id}</td>
+                                                <td title={employeeData.state}>{statesOptions.find((state) => state.value === employeeData.state)?.id}</td>
                                                 <td>{employeeData.zipCode}</td>
                                                 <td className="actions">
                                                     <button className="main-button actions-bts"
