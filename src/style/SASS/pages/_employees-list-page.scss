@@ -148,6 +148,14 @@
     width: 100%;
     margin-top: 15px;
 
+    &__detail-entries {
+        text-align: center;
+
+        .more-visible {
+            font-weight: 500;
+        }
+    }
+
     &__pagination {
         display: flex;
         align-items: center;
@@ -157,15 +165,23 @@
             padding: 5px;
             @include font-set(1rem, 400);
 
-            &.disabled {
+            &.current {
                 pointer-events: none;
-                opacity: 0.4;
-                cursor: default;
+                border: 2px inset darken($main-color, 10);
+                border-radius: 5px;
+                background-color: $main-color;
+                color: white;
+            }
+
+            &[disabled] {
+                border-color: darkgray;
+                pointer-events: none;
             }
         }
 
         &__pages {
             display: flex;
+            align-items: center;
             gap: 10px;
         }
     }

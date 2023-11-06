@@ -1,6 +1,12 @@
 import { useContext,useEffect,useState } from "react";
 import { EmployeeDataType,EmployeesContext } from "../context/EmployeesContext";
-import { SortingDetailType } from "../../pages/EmployeesListPage";
+import type { PaginationTrackingType,SortingDetailType } from "../../pages/EmployeesListPage";
+
+type ResultsDisplayNumbersType = {
+    firstPaginationElementNumber: number,
+    lastPaginationElementNumber: number,
+    totalFilteredElementsNumber: number,
+};
 
 /**
  * @description
@@ -9,12 +15,19 @@ import { SortingDetailType } from "../../pages/EmployeesListPage";
  * 
  * @returns A new employees data array that got filtered, sorted and paginated
  */
-function useEmployeesTableSearchSortPaging(searchTerm: string,sortingDetail: SortingDetailType) {
+function useEmployeesTableSearchSortPaging(searchTerm: string,sortingDetail: SortingDetailType,paginationTracking: PaginationTrackingType) {
+    const { showEntries,currentPageNumber,setCurrentPageNumber,setTotalPagesNumber } = paginationTracking;
+
     // Get employees data array from EmployeesContext
     const { employeesDataArray } = useContext(EmployeesContext);
 
     // State variables
     const [filteredEmployeesDataArray,setFilteredEmployeesDataArray] = useState<EmployeeDataType[]>([]);
+    const [resultsDisplayNumbers,setResultsDisplayNumbersType] = useState<ResultsDisplayNumbersType>({
+        firstPaginationElementNumber: 0,
+        lastPaginationElementNumber: 0,
+        totalFilteredElementsNumber: 0
+    });
 
     useEffect(() => {
         // Search
@@ -23,10 +36,18 @@ function useEmployeesTableSearchSortPaging(searchTerm: string,sortingDetail: Sor
         // Column sorting
         const sortedArray: EmployeeDataType[] = applySorting(filteredArray,sortingDetail);
 
-        setFilteredEmployeesDataArray(sortedArray);
-    },[employeesDataArray,searchTerm,sortingDetail]);
+        // Pagination
+        const paginatedArray: EmployeeDataType[] = applyPagination(sortedArray,{
+            showEntries,
+            currentPageNumber,
+            setCurrentPageNumber,
+            setTotalPagesNumber
+        },setResultsDisplayNumbersType);
 
-    return { filteredEmployeesDataArray };
+        setFilteredEmployeesDataArray(paginatedArray);
+    },[employeesDataArray,searchTerm,sortingDetail,currentPageNumber,setCurrentPageNumber,showEntries,setTotalPagesNumber]);
+
+    return { filteredEmployeesDataArray,resultsDisplayNumbers };
 }
 
 export default useEmployeesTableSearchSortPaging;
@@ -112,6 +133,52 @@ function applySorting(employeesDataArray: EmployeeDataType[],sortingDetail: Sort
     }
 
     const newArray: EmployeeDataType[] = [...employeesDataArray].sort(sortingFunction);
+
+    return newArray;
+}
+
+function applyPagination(employeesDataArray: EmployeeDataType[],paginationTracking: PaginationTrackingType,setResultsDisplayNumbersType: React.Dispatch<React.SetStateAction<ResultsDisplayNumbersType>>) {
+    const { showEntries,currentPageNumber,setCurrentPageNumber,setTotalPagesNumber } = paginationTracking;
+
+    // Determine the number of pages or set all to 0 if array is empty
+    if (employeesDataArray.length === 0) {
+        setCurrentPageNumber(0);
+        setTotalPagesNumber(0);
+        setResultsDisplayNumbersType({
+            firstPaginationElementNumber: 0,
+            lastPaginationElementNumber: 0,
+            totalFilteredElementsNumber: 0
+        });
+
+        return [];
+    }
+
+    const totalPagesNumber: number = Math.ceil(employeesDataArray.length / parseInt(showEntries));
+    setTotalPagesNumber(totalPagesNumber);
+
+    // Determine last index of elements of current page
+    const lastArrayIndex: number = (currentPageNumber * parseInt(showEntries)) > employeesDataArray.length ? (
+        employeesDataArray.length - 1
+    ) : (
+        (currentPageNumber * parseInt(showEntries)) - 1
+    );
+    // Determine first index of elements of current page
+    const restElementsToSubtractNumber: number = employeesDataArray.length - ((totalPagesNumber - 1) * parseInt(showEntries));
+
+    const firstArrayIndex: number = (currentPageNumber * parseInt(showEntries)) > employeesDataArray.length ? (
+        (lastArrayIndex - restElementsToSubtractNumber) + 1
+    ) : (
+        (lastArrayIndex - parseInt(showEntries)) + 1
+    );
+
+    setResultsDisplayNumbersType({
+        firstPaginationElementNumber: firstArrayIndex + 1,
+        lastPaginationElementNumber: lastArrayIndex + 1,
+        totalFilteredElementsNumber: employeesDataArray.length
+    });
+
+    // Return an array of elements of the current page
+    const newArray: EmployeeDataType[] = employeesDataArray.filter((_,index) => index >= firstArrayIndex && index <= lastArrayIndex);
 
     return newArray;
 }

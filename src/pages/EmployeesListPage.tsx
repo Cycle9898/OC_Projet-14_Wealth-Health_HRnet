@@ -1,4 +1,4 @@
-import { useContext,useId,useState } from "react";
+import { useContext,useEffect,useId,useState } from "react";
 import { EmployeesContext } from "../utils/context/EmployeesContext";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { Dropdown } from "@cycle9898/react-custom-dropdown-component";
@@ -13,6 +13,13 @@ import { FaCaretUp,FaCaretDown } from "react-icons/fa6";
 export type SortingDetailType = {
     columnName: string,
     sortingType: string
+};
+
+export type PaginationTrackingType = {
+    showEntries: string,
+    currentPageNumber: number,
+    setCurrentPageNumber: React.Dispatch<React.SetStateAction<number>>,
+    setTotalPagesNumber: React.Dispatch<React.SetStateAction<number>>
 };
 
 /**
@@ -31,6 +38,8 @@ function EmployeesListPage() {
     // Employees table State variables
     const [showEntries,setShowEntries] = useState<string>("");
     const [searchTerm,setSearchTerm] = useState<string>("");
+    const [currentPageNumber,setCurrentPageNumber] = useState<number>(1);
+    const [totalPagesNumber,setTotalPagesNumber] = useState<number>(0);
     const tableHeadersArray: string[] = [
         "First Name",
         "Last Name",
@@ -44,8 +53,14 @@ function EmployeesListPage() {
     ];
 
     // Search, sort or paginate related
+    const paginationTracking: PaginationTrackingType = {
+        showEntries,
+        currentPageNumber,
+        setCurrentPageNumber,
+        setTotalPagesNumber
+    };
     const [sortingDetail,setSortingDetail] = useState<SortingDetailType>({ columnName: "First Name",sortingType: "ASC" });
-    const { filteredEmployeesDataArray } = useEmployeesTableSearchSortPaging(searchTerm,sortingDetail);
+    const { filteredEmployeesDataArray,resultsDisplayNumbers } = useEmployeesTableSearchSortPaging(searchTerm,sortingDetail,paginationTracking);
 
     const isSortActive = (columnName: string,sortingType: string) => {
         return ((sortingDetail.columnName === columnName && sortingDetail.sortingType === sortingType) ||
@@ -60,6 +75,21 @@ function EmployeesListPage() {
         }
     }
 
+    const generatePageNumbersArray = () => {
+        if (totalPagesNumber === 0) { return ["-"]; }
+
+        switch (true) {
+            case currentPageNumber - 4 > 0 && currentPageNumber + 3 < totalPagesNumber && totalPagesNumber > 6:
+                return [1,"...",currentPageNumber - 2,currentPageNumber - 1,currentPageNumber,currentPageNumber + 1,currentPageNumber + 2,"...",totalPagesNumber];
+            case currentPageNumber + 3 < totalPagesNumber && totalPagesNumber > 6:
+                return [1,2,3,4,5,"...",totalPagesNumber];
+            case currentPageNumber - 4 > 0 && totalPagesNumber > 6:
+                return [1,"...",totalPagesNumber - 4,totalPagesNumber - 3,totalPagesNumber - 2,totalPagesNumber - 1,totalPagesNumber];
+            default:
+                return Array.from({ length: totalPagesNumber },(_,index) => index + 1);
+        }
+    }
+
     // ID's
     const showEntriesNbLabelId = useId();
     const searchLabelId = useId();
@@ -67,6 +97,12 @@ function EmployeesListPage() {
 
     // Fetch employees data with custom Hook
     useGetEmployeesData();
+
+    useEffect(() => {
+        // Reset current page number if showEntries or searchTerm change
+        setCurrentPageNumber(1);
+
+    },[showEntries,searchTerm]);
 
     if (isEmployeesError) {
         return (
@@ -106,7 +142,7 @@ function EmployeesListPage() {
                                 <label htmlFor={searchInputId} id={searchLabelId}>Search:</label>
 
                                 <input id={searchInputId}
-                                    type="text"
+                                    type="search"
                                     aria-labelledby={searchLabelId}
                                     value={searchTerm}
                                     onChange={(event) => setSearchTerm(event.target.value)}
@@ -181,26 +217,46 @@ function EmployeesListPage() {
 
                         <div className="paging">
                             <div className="paging__detail-entries">
-                                <span style={{ color: "red" }}>
-                                    Showing {"TBC"/* first el */} to {"TBC"/* last el */} of {filteredEmployeesDataArray.length} entries
+                                <p>
+                                    Showing <span className="more-visible">{resultsDisplayNumbers.firstPaginationElementNumber}</span> to
+                                    <span className="more-visible"> {resultsDisplayNumbers.lastPaginationElementNumber}</span> of
+                                    <span className="more-visible"> {resultsDisplayNumbers.totalFilteredElementsNumber}</span> entries
                                     {searchTerm.length >= 2 ? ` (filtered from ${employeesDataArray.length} total entries)` : null}
-                                </span>
+                                </p>
                             </div>
 
                             <div className="paging__pagination">
                                 <button
-                                    className="paging__pagination__prev main-button"
+                                    className="main-button"
+                                    aria-label="Previous page"
+                                    onClick={() => setCurrentPageNumber((prevState) => prevState - 1)}
+                                    disabled={currentPageNumber === 1 || generatePageNumbersArray()[0] === "-"}
                                 >
                                     Previous
                                 </button>
 
                                 <div className="paging__pagination__pages">
-                                    {/* TBC ... pages numbers */}
-                                    <button style={{ color: "red" }}>1</button>
+                                    {generatePageNumbersArray().map((page,index) => (
+                                        typeof page === "string" ? (
+                                            <span key={`${page}-${index}`}>{page}</span>
+                                        ) : (
+                                            <button key={`${page}-${index}`}
+                                                tabIndex={currentPageNumber === page ? -1 : 0}
+                                                aria-label={`Page number ${page}`}
+                                                className={currentPageNumber === page ? "current" : "main-button"}
+                                                onClick={() => setCurrentPageNumber(page)}
+                                            >
+                                                {page}
+                                            </button>
+                                        )
+                                    ))}
                                 </div>
 
                                 <button
-                                    className="paging__pagination__next main-button"
+                                    className="main-button"
+                                    aria-label="Next page"
+                                    onClick={() => setCurrentPageNumber((prevState) => prevState + 1)}
+                                    disabled={currentPageNumber === totalPagesNumber || generatePageNumbersArray()[0] === "-"}
                                 >
                                     Next
                                 </button>
