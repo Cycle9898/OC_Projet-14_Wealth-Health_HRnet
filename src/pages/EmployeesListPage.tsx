@@ -1,4 +1,5 @@
 import { useContext,useEffect,useId,useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { EmployeesContext } from "../utils/context/EmployeesContext";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { Dropdown } from "@cycle9898/react-custom-dropdown-component";
@@ -97,6 +98,9 @@ function EmployeesListPage() {
 
     // Fetch employees data with custom Hook
     useGetEmployeesData();
+
+    // useNavigate Hook
+    const navigate = useNavigate();
 
     useEffect(() => {
         // Reset current page number if showEntries or searchTerm change
@@ -198,6 +202,7 @@ function EmployeesListPage() {
                                                     <button className="main-button actions-bts"
                                                         aria-label={`Edit ${employeeData.firstName} ${employeeData.lastName}`}
                                                         title={`Edit ${employeeData.firstName} ${employeeData.lastName}`}
+                                                        onClick={() => navigate(`/edit-employee/${employeeData.id}`)}
                                                     >
                                                         <MdModeEditOutline />
                                                     </button>

@@ -41,7 +41,7 @@
     }
 }
 
-/* EmployeeSavedSubModal component */
+/* EmployeeSavedSubModal and EmployeeEditedSubModal component */
 
 .employee-save-status-sub-modal {
     margin: 30px;
@@ -57,5 +57,9 @@
 
     >button {
         padding: 10px 20px;
+
+        &.less-visible {
+            font-size: 1.2rem;
+        }
     }
 }

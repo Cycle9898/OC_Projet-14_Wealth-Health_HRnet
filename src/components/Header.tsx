@@ -1,5 +1,5 @@
 import { useContext,useEffect } from 'react';
-import { Link,useLocation } from 'react-router-dom';
+import { Link,useLocation,useParams } from 'react-router-dom';
 import wealthHealthLogo from '../assets/logo/logo-solo_Wealth-Health.png';
 import { AuthContext } from '../utils/context/AuthContext';
 import { useLogoutService } from '../utils/hooks/AuthServices';
@@ -14,6 +14,7 @@ import { FaSignOutAlt } from 'react-icons/fa'
 function Header() {
     // React-router hook to handle location
     const { pathname }: { pathname: string } = useLocation();
+    const employeeIdParam: string | undefined = useParams().employeeId;
 
     // Get connect status from Context
     const { isConnected } = useContext(AuthContext);
@@ -38,12 +39,15 @@ function Header() {
             case "/add-employee":
                 pageName = "Add an employee";
                 break;
+            case `/edit-employee/${employeeIdParam}`:
+                pageName = "Edit an employee";
+                break;
             default:
                 pageName = "Error";
         }
 
         document.title = `Wealth Health - ${pageName}`;
-    },[pathname]);
+    },[pathname,employeeIdParam]);
 
     return (
         <header className="header">

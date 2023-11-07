@@ -38,6 +38,10 @@ const defineRoutes = createBrowserRouter([
         element: <ProtectedRoute pageName="add-employee" />
       },
       {
+        path: "/edit-employee/:employeeId",
+        element: <ProtectedRoute pageName="edit-employee" />
+      },
+      {
         path: "/forbidden",
         element: <ErrorPage errorCode="401" />
       },

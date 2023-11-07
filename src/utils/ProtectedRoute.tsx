@@ -4,6 +4,7 @@ import { Navigate } from "react-router-dom";
 import HomePage from "../pages/HomePage";
 import AddEmployeePage from "../pages/AddEmployeePage";
 import EmployeesListPage from "../pages/EmployeesListPage";
+import EditEmployeePage from "../pages/EditEmployeePage";
 
 type Props = {
     pageName: string
@@ -37,6 +38,10 @@ function ProtectedRoute({ pageName }: Props) {
 
         case "employees-list":
             reactComponent = <EmployeesListPage />;
+            break;
+
+        case "edit-employee":
+            reactComponent = <EditEmployeePage />;
             break;
 
         default:
