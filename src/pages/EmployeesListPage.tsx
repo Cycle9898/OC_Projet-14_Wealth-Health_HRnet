@@ -172,25 +172,26 @@ function EmployeesListPage() {
                             <thead className="employees-table__header">
                                 <tr>
                                     {tableHeadersArray.map((header) => (
-                                        <th key={header}
-                                            tabIndex={0}
-                                            role="button"
-                                            aria-label={`Sort ${header} column ${(sortingDetail.columnName === header && sortingDetail.sortingType === "ASC") ?
-                                                "descending" : "ascending"}`}
-                                            title={`Sort "${header}" column ${(sortingDetail.columnName === header && sortingDetail.sortingType === "ASC") ?
-                                                "descending" : "ascending"}`}
-                                            onClick={() => toggleSortCaret(header)}
-                                            onKeyDown={(event) => event.key === "Enter" && toggleSortCaret(header)}
-                                        >
-                                            <span>{header}</span>
-                                            <span className="sorting-carets">
-                                                {isSortActive(header,"ASC") && <FaCaretUp />}
-                                                {isSortActive(header,"DESC") && <FaCaretDown />}
-                                            </span>
+                                        <th key={header}>
+                                            <div tabIndex={0}
+                                                role="button"
+                                                aria-label={`Sort ${header} column ${(sortingDetail.columnName === header && sortingDetail.sortingType === "ASC") ?
+                                                    "descending" : "ascending"}`}
+                                                title={`Sort "${header}" column ${(sortingDetail.columnName === header && sortingDetail.sortingType === "ASC") ?
+                                                    "descending" : "ascending"}`}
+                                                onClick={() => toggleSortCaret(header)}
+                                                onKeyDown={(event) => event.key === "Enter" && toggleSortCaret(header)}
+                                            >
+                                                <span>{header}</span>
+                                                <span className="sorting-carets">
+                                                    {isSortActive(header,"ASC") && <FaCaretUp />}
+                                                    {isSortActive(header,"DESC") && <FaCaretDown />}
+                                                </span>
+                                            </div>
                                         </th>
                                     ))}
 
-                                    <th className="not-sorted">Actions</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
 
