@@ -10,6 +10,8 @@ import { ImBin } from "react-icons/im";
 import { MdModeEditOutline } from "react-icons/md";
 import useEmployeesTableSearchSortPaging from "../utils/hooks/EmployeesTableServices";
 import { FaCaretUp,FaCaretDown } from "react-icons/fa6";
+import ModalMainContainer from "../components/modal-related/ModalMainContainer";
+import EmployeeDeleteConfirmationSubModal from "../components/modal-related/EmployeeDeleteConfirmationSubModal";
 
 export type SortingDetailType = {
     columnName: string,
@@ -52,6 +54,18 @@ function EmployeesListPage() {
         "State",
         "Zip Code"
     ];
+
+    // Modal handling
+    const [isModalOpen,setIsModalOpen] = useState<boolean>(false);
+    const [deletedEmployeeId,setDeletedEmployeeId] = useState<string>("");
+
+    const handleDeleteEmployee = (event: React.MouseEvent,employeeId: string) => {
+        // Avoid unwanted click interactions in the modal
+        event.stopPropagation();
+
+        setDeletedEmployeeId(employeeId);
+        setIsModalOpen(true);
+    }
 
     // Search, sort or paginate related
     const paginationTracking: PaginationTrackingType = {
@@ -210,6 +224,7 @@ function EmployeesListPage() {
                                                     <button className="main-button actions-bts"
                                                         aria-label={`Delete ${employeeData.firstName} ${employeeData.lastName}`}
                                                         title={`Delete ${employeeData.firstName} ${employeeData.lastName}`}
+                                                        onClick={(event) => handleDeleteEmployee(event,employeeData.id)}
                                                     >
                                                         <ImBin />
                                                     </button>
@@ -268,6 +283,17 @@ function EmployeesListPage() {
                             </div>
                         </div>
                     </section>
+
+                    {isModalOpen && <ModalMainContainer
+                        openingStatus={isModalOpen}
+                        setOpeningStatus={setIsModalOpen}
+                        displayedComponent={
+                            <EmployeeDeleteConfirmationSubModal
+                                setOpeningStatus={setIsModalOpen}
+                                deletedEmployeeId={deletedEmployeeId}
+                                setDeletedEmployeeId={setDeletedEmployeeId} />
+                        }
+                    />}
                 </main>
             )}
         </>

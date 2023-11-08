@@ -67,7 +67,6 @@ function ModalMainContainer({ openingStatus,setOpeningStatus,displayedComponent 
                     aria-label="Close the modal"
                     ref={closeBtn}
                     onClick={() => setOpeningStatus(false)}
-                    onKeyDown={(event) => [" ","Enter"].includes(event.key) && setOpeningStatus(false)}
                 >
                     <FaXmark />
                 </button>

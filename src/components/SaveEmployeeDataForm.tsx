@@ -198,7 +198,6 @@ function SaveEmployeeDataForm({ employeeId }: Props) {
                         className="main-button"
                         aria-hidden={isModalOpen}
                         onClick={(event) => handleFormSubmit(event)}
-                        onKeyDown={(event) => [" ","Enter"].includes(event.key) && handleFormSubmit()}
                     >
                         Save
                     </button>

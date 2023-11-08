@@ -43,7 +43,8 @@
 
 /* EmployeeSavedSubModal and EmployeeEditedSubModal component */
 
-.employee-save-status-sub-modal {
+.employee-save-status-sub-modal,
+.employee-delete-confirmation-sub-modal {
     margin: 30px;
     display: flex;
     flex-direction: column;
@@ -60,6 +61,36 @@
 
         &.less-visible {
             font-size: 1.2rem;
+        }
+    }
+}
+
+/* EmployeeDeleteConfirmationSubModal component */
+
+.employee-delete-confirmation-sub-modal {
+    .confirmation-buttons {
+        display: flex;
+        align-items: center;
+        column-gap: 40px;
+    }
+
+    button {
+        display: flex;
+        align-items: center;
+        column-gap: 5px;
+        padding: 10px;
+
+        >span {
+            font-size: 1.5rem;
+            line-height: 1rem;
+
+            &.accept {
+                color: green;
+            }
+
+            &.decline {
+                color: red;
+            }
         }
     }
 }
