@@ -213,10 +213,10 @@
     "@babel/helper-validator-identifier" "^7.22.15"
     to-fast-properties "^2.0.0"
 
-"@cycle9898/react-custom-dropdown-component@^0.3.5":
-  version "0.3.5"
-  resolved "https://registry.yarnpkg.com/@cycle9898/react-custom-dropdown-component/-/react-custom-dropdown-component-0.3.5.tgz#0f662b907fbb3cb40334039064cae4163b06c191"
-  integrity sha512-geQF0eC9kJfTJvb9W5lS0k2NDuoWELyFjBz9w+xDCUMd7TNwEQOw62bdqNqBKfr4j6QIi7MPooGVlojSI/xPuQ==
+"@cycle9898/react-custom-dropdown-component@^0.3.6":
+  version "0.3.6"
+  resolved "https://registry.yarnpkg.com/@cycle9898/react-custom-dropdown-component/-/react-custom-dropdown-component-0.3.6.tgz#bd77acc8aa556ca676ea0621685e97e8acd05e20"
+  integrity sha512-Jl/fdxX6PPBPI6YDz2/6fhDPTOgI9VU3RUdRD9cYV50oqSZ6bSXU8kxBjspWo6EyxS7OWn+se9tRyYhdAusMsw==
   dependencies:
     react-icons "^4.11.0"
 
