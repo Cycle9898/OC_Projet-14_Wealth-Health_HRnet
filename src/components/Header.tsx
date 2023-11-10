@@ -33,8 +33,8 @@ function Header() {
             case "/home":
                 pageName = "Home";
                 break;
-            case "/employee-list":
-                pageName = "Employee list";
+            case "/employees-list":
+                pageName = "Employees list";
                 break;
             case "/add-employee":
                 pageName = "Add an employee";
