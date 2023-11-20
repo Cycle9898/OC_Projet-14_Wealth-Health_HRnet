@@ -22,8 +22,8 @@ function LoginPage() {
     const navigate = useNavigate();
 
     // Handle all input values and form controls with useState Hooks (local state) and some functions
-    const [emailInput,setEmailInput] = useState<string>("");
-    const [passwordInput,setPasswordInput] = useState<string>("");
+    const [emailInput,setEmailInput] = useState<string>("hr@wealth-health.com"); //for testing convenience, otherwise empty string
+    const [passwordInput,setPasswordInput] = useState<string>("password123"); //for testing convenience, otherwise empty string
     const [isEmailValid,setEmailValid] = useState<boolean | null>(null);
     const [isFormCompleted,setFormCompleted] = useState<boolean | null>(null);
 

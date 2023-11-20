@@ -28,11 +28,16 @@ Performance checks, to compare the 2 applications' efficiency, have been made wi
 
 - [Yarn](https://yarnpkg.com/)
 
-- [MongoDB](https://www.mongodb.com/try/download/community)
+- [MongoDB](https://www.mongodb.com/try/download/community): if the back-end is hosted locally.
 
 # Getting Started (Back-end)
 
-Follow [these instructions](https://github.com/Cycle9898/OC_Projet-14_Wealth-Health_Back-end) to set up the back-end part.
+**This step can be skipped because the back-end part is currently hosted on a cloud platform.**
+
+Otherwise, it is possible to test the complete app locally.
+
+To do so, delete the .env file provided in the repo (or edit/remove VITE_API_URL environment variable) and
+follow [these instructions](https://github.com/Cycle9898/OC_Projet-14_Wealth-Health_Back-end) to set up the back-end part.
 
 # Getting Started (Front-end)
 
@@ -67,6 +72,8 @@ Create or modify the .env file in the project's root and add this one :
 It will modify the API base URL.
 
 Otherwise, the default base URL is "http://localhost:3001/api/v1".
+
+Note: A .env file is provided in the repo with this environment variable set to the platform URL where the API is hosted.
 
 # Lighthouse JSON reports
 
