@@ -55,7 +55,10 @@ const defineRoutes = createBrowserRouter([
       }
     ]
   }
-]);
+],
+  {
+    basename: "/OC_Projet-14_Wealth-Health_HRnet"
+  });
 
 /**
  * @description
